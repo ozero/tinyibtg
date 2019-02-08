@@ -1,5 +1,10 @@
 settings.php
 index.html
+/index.php
+[0-9]+.php
+res/*.*
+thumb/*.*
+src/*.*
 *.html
 *.db
 .posts

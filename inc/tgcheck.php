@@ -10,6 +10,7 @@ function auth_tgcheck(){
     $auth_data_json = urldecode($_COOKIE['tg_user']);
     $auth_data = json_decode($auth_data_json, true);
     define("AUTH_DATA", $auth_data);
+
   }
 }
 

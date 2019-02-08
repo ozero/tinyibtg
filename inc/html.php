@@ -3,36 +3,37 @@ if (!defined('TINYIB_BOARD')) {
 	die('');
 }
 
-function pageHeader() {
-	$js_captcha = TINYIB_CAPTCHA === 'recaptcha' ? '<script src="https://www.google.com/recaptcha/api.js" async defer></script>' : '';
+function pageHeader($is_subdir) {
+	$return = [];
 
-	$return = <<<EOF
-<?php require_once("____ABSOLUTE_PATH_FOR_TGCHECK_PHP____/inc/tgcheck.php"); ?><!DOCTYPE html>
-<html>
-	<head>
-		<meta http-equiv="content-type" content="text/html;charset=UTF-8">
-		<meta http-equiv="cache-control" content="max-age=0">
-		<meta http-equiv="cache-control" content="no-cache">
-		<meta http-equiv="expires" content="0">
-		<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
-		<meta http-equiv="pragma" content="no-cache">
-		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<title>
-EOF;
-	$return .= TINYIB_BOARDDESC . <<<EOF
-		</title>
-		<link rel="shortcut icon" href="favicon.ico">
-		<link rel="stylesheet" type="text/css" href="css/global.css">
-		<link rel="stylesheet" type="text/css" href="css/futaba.css" title="Futaba">
-		<link rel="alternate stylesheet" type="text/css" href="css/burichan.css" title="Burichan">
-		<link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed" rel="stylesheet">
-		<script src="js/jquery.js"></script>
-		<script src="js/script.js"></script>
-		<script src="js/tinyib.js"></script>
-		$js_captcha
-	</head>
-EOF;
-	return $return;
+	$return[] = ($is_subdir)?
+	  "<?php require_once('../inc/tgcheck.php');?>":
+	  "<?php require_once('./inc/tgcheck.php');?>";
+	$return[] = '<?php $_authdata_tpl = AUTH_DATA; ?>';
+	$return[] = '<?php $_tpl_name = "{$_authdata_tpl[\'first_name\']} {$_authdata_tpl[\'last_name\']} ({$_authdata_tpl[\'id\']})"; ?>';
+	$return[] = '<!DOCTYPE html><html><head>';
+	$return[] = '<meta http-equiv="content-type" content="text/html;charset=UTF-8">';
+	$return[] = '<meta http-equiv="cache-control" content="max-age=0">';
+	$return[] = '<meta http-equiv="cache-control" content="no-cache">';
+	$return[] = '<meta http-equiv="expires" content="0">';
+	$return[] = '<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">';
+	$return[] = '<meta http-equiv="pragma" content="no-cache">';
+	$return[] = '<meta name="viewport" content="width=device-width,initial-scale=1">';
+	$return[] = '<title>'. TINYIB_BOARDDESC . '</title>';
+	$return[] = '<link rel="shortcut icon" href="favicon.ico">';
+	$return[] = '<link rel="stylesheet" type="text/css" href="css/global.css">';
+	$return[] = '<link rel="stylesheet" type="text/css" href="css/futaba.css" title="Futaba">';
+	$return[] = '<link rel="alternate stylesheet" type="text/css" href="css/burichan.css" title="Burichan">';
+	$return[] = '<link href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">';
+	$return[] = '<script src="js/jquery.js"></script>';
+	$return[] = '<script src="js/script.js"></script>';
+	$return[] = '<script src="js/tinyib.js"></script>';
+	$return[] = ( TINYIB_CAPTCHA === 'recaptcha' )?
+	  '<script src="https://www.google.com/recaptcha/api.js" async defer></script>' :
+	  '';
+	$return[] = '</head>';
+
+	return join("\n", $return);
 }
 
 function pageFooter() {
@@ -41,7 +42,7 @@ function pageFooter() {
 
 	return <<<EOF
 		<div class="footer">
-			<a href="/login_tg.php">[ログアウト]</a> /  
+			<a href="/login_tg.php">[ログアウト]</a> /
 			<!-- - <a href="http://www.2chan.net" target="_top">futaba</a> + <a href="http://www.1chan.net" target="_top">futallaby</a> + <a href="https://gitlab.com/tslocum/tinyib" target="_top">tinyib</a> - -->
 			Forked from <a href="https://gitlab.com/tslocum/tinyib" target="_top">tinyib</a>
 		</div>
@@ -101,20 +102,20 @@ function buildPostForm($parent, $raw_post = false) {
 		$form_action = '?';
 		$form_extra = '<input type="hidden" name="rawpost" value="1">';
 		$input_extra = <<<EOF
-					<tr>
-						<td class="postblock">
-							Reply to
-						</td>
-						<td>
-							<input type="text" name="parent" size="28" maxlength="75" value="0" accesskey="t">&nbsp;0 to start a new thread
-						</td>
-					</tr>
+			<tr>
+			<td class="postblock">
+			Reply to
+			</td>
+			<td>
+			<input type="text" name="parent" size="28" maxlength="75" value="0" accesskey="t">&nbsp;0 to start a new thread
+			</td>
+			</tr>
 EOF;
 		$rules_extra = <<<EOF
-							<ul>
-								<li>Text entered in the Message field will be posted as is with no formatting applied.</li>
-								<li>Line-breaks must be specified with "&lt;br&gt;".</li>
-							</ul><br>
+			<ul>
+			<li>Text entered in the Message field will be posted as is with no formatting applied.</li>
+			<li>Line-breaks must be specified with "&lt;br&gt;".</li>
+			</ul><br>
 EOF;
 	}
 
@@ -130,36 +131,36 @@ EOF;
 	if (TINYIB_CAPTCHA && !$raw_post) {
 		if (TINYIB_CAPTCHA === 'recaptcha') {
 			$captcha_inner_html = '
-<div style="min-height: 80px;">
-	<div class="g-recaptcha" data-sitekey="' . TINYIB_RECAPTCHA_SITE . '"></div>
-	<noscript>
-		<div>
-			<div style="width: 302px; height: 422px; position: relative;">
+				<div style="min-height: 80px;">
+				<div class="g-recaptcha" data-sitekey="' . TINYIB_RECAPTCHA_SITE . '"></div>
+				<noscript>
+				<div>
+				<div style="width: 302px; height: 422px; position: relative;">
 				<div style="width: 302px; height: 422px; position: absolute;">
-					<iframe src="https://www.google.com/recaptcha/api/fallback?k=' . TINYIB_RECAPTCHA_SITE . '" frameborder="0" scrolling="no" style="width: 302px; height:422px; border-style: none;"></iframe>
+				<iframe src="https://www.google.com/recaptcha/api/fallback?k=' . TINYIB_RECAPTCHA_SITE . '" frameborder="0" scrolling="no" style="width: 302px; height:422px; border-style: none;"></iframe>
 				</div>
-			</div>
-			<div style="width: 300px; height: 60px; border-style: none;bottom: 12px; left: 25px; margin: 0px; padding: 0px; right: 25px;background: #f9f9f9; border: 1px solid #c1c1c1; border-radius: 3px;">
+				</div>
+				<div style="width: 300px; height: 60px; border-style: none;bottom: 12px; left: 25px; margin: 0px; padding: 0px; right: 25px;background: #f9f9f9; border: 1px solid #c1c1c1; border-radius: 3px;">
 				<textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid #c1c1c1; margin: 10px 25px; padding: 0px; resize: none;"></textarea>
-			</div>
-		</div>
-	</noscript>
-</div>';
+				</div>
+				</div>
+				</noscript>
+				</div>';
 		} else { // Simple CAPTCHA
 			$captcha_inner_html = '
-<input type="text" name="captcha" id="captcha" size="6" accesskey="c" autocomplete="off">&nbsp;&nbsp;(enter the text below)<br>
-<img id="captchaimage" src="inc/captcha.php" width="175" height="55" alt="CAPTCHA" onclick="javascript:reloadCAPTCHA()" style="margin-top: 5px;cursor: pointer;">';
+				<input type="text" name="captcha" id="captcha" size="6" accesskey="c" autocomplete="off">&nbsp;&nbsp;(enter the text below)<br>
+				<img id="captchaimage" src="inc/captcha.php" width="175" height="55" alt="CAPTCHA" onclick="javascript:reloadCAPTCHA()" style="margin-top: 5px;cursor: pointer;">';
 		}
 
 		$captcha_html = <<<EOF
-					<tr>
-						<td class="postblock">
-							CAPTCHA
-						</td>
-						<td>
-							$captcha_inner_html
-						</td>
-					</tr>
+			<tr>
+			<td class="postblock">
+			CAPTCHA
+			</td>
+			<td>
+			$captcha_inner_html
+			</td>
+			</tr>
 EOF;
 	}
 
@@ -172,23 +173,23 @@ EOF;
 		$filetypes_html = '<li>' . supportedFileTypes() . '</li>';
 
 		$file_input_html = <<<EOF
-					<tr class="postform_hidden">
-						<td>
-							<div class="formlabel">画像ファイル(2MB)</div>
-							<input type="file" name="file" size="35" accesskey="f">
-						</td>
-					</tr>
+			<tr class="postform_hidden">
+			<td>
+			<div class="formlabel">画像ファイル(2MB)</div>
+			<input type="file" name="file" size="35" accesskey="f">
+			</td>
+			</tr>
 EOF;
 	}
 
 	if (!empty($tinyib_embeds) && ($raw_post || !in_array('embed', $hide_fields))) {
 		$embed_input_html = <<<EOF
-					<tr class="postform_hidden">
-						<td>
-							<div class="formlabel">添付URL</div>
-							<input type="text" name="embed" size="28" accesskey="x" autocomplete="off">&nbsp;&nbsp;(paste a YouTube URL)
-						</td>
-					</tr>
+			<tr class="postform_hidden">
+			<td>
+			<div class="formlabel">添付URL</div>
+			<input type="text" name="embed" size="28" accesskey="x" autocomplete="off">&nbsp;&nbsp;(paste a YouTube URL)
+			</td>
+			</tr>
 EOF;
 	}
 
@@ -211,63 +212,59 @@ EOF;
 		$unique_posts_html = "<li>Currently $unique_posts unique user posts.</li>\n";
 	}
 
-	$output = <<<EOF
-		<div class="postarea">
-			<div align="center"><button id="toggle_postform" class="biggreenbtn">新しい投稿を書く</button></div>
-			<form name="postform" id="postform" action="$form_action" method="post" enctype="multipart/form-data">
-			$max_file_size_input_html
-			$form_extra
-			<table class="postform">
-				<tbody>
-					$input_extra
-EOF;
+	$output = "";
+	$output .= '<div class="postarea">';
+	$output .= '<div align="center"><button id="toggle_postform" class="biggreenbtn">新しい投稿を書く</button></div>';
+	$output .= '<form name="postform" id="postform" action="'.$form_action.'" method="post" enctype="multipart/form-data">';
+	$output .= $max_file_size_input_html;
+	$output .= $form_extra;
+	$output .= '<table class="postform">';
+	$output .= '<tbody>';
+	$output .= $input_extra;
+
 	if ($raw_post || !in_array('name', $hide_fields)) {
-		$output .= <<<EOF
-					<tr class="postform_hidden">
-						<td>
-							<div class="formlabel">あなたのTG名</div>
-							{$auth_data['first_name']} {$auth_data['last_name']} ({$auth_data['id']})
-							<input type="hidden" name="name" size="28"
-							value="{$auth_data['first_name']} {$auth_data['last_name']} ({$auth_data['id']})"
-							accesskey="n">
-							{$postform_extra['name']}
-						</td>
-					</tr>
-EOF;
+		$output .= '<tr class="postform_hidden">';
+		$output .= '<td>';
+		$output .= '<div class="formlabel">あなたのTG名</div>';
+		$output .= '<?php echo $_tpl_name; ?>';
+		$output .= '<input type="hidden" name="name" size="28" value="<?php echo $_tpl_name; ?>" accesskey="n">';
+		$output .= $postform_extra['name'];
+		$output .= '</td>';
+		$output .= '</tr>';
 	}
 	if ($raw_post || !in_array('email', $hide_fields)) {
 		$output .= <<<EOF
-					<!-- tr>
-						<td class="postblock">
-							E-mail
-						</td>
-						<td>
-							<input type="text" name="email" size="28" maxlength="75" accesskey="e">
-							{$postform_extra['email']}
-						</td>
-					</tr -->
-					<input type="hidden" name="email" value="{$auth_data['id']}">
+			<!-- tr>
+			<td class="postblock">
+			E-mail
+			</td>
+			<td>
+			<input type="text" name="email" size="28" maxlength="75" accesskey="e">
+			{$postform_extra['email']}
+			</td>
+			</tr -->
+			<input type="hidden" name="email" value="{$auth_data['id']}">
 
 EOF;
 	}
 	if ($raw_post || !in_array('subject', $hide_fields)) {
 		$output .= <<<EOF
-					<tr class="postform_hidden">
-						<td>
-							<div class="formlabel">件名</div>
-							<input type="text" name="subject" id="form_name" maxlength="75" accesskey="s" autocomplete="off">
-						</td>
-					</tr>
+			<tr class="postform_hidden">
+			<td>
+			<div class="formlabel">件名</div>
+			<input type="text" name="subject" id="form_name" maxlength="75" accesskey="s" autocomplete="off">
+			</td>
+			</tr>
 EOF;
 	}
 	if ($raw_post || !in_array('message', $hide_fields)) {
 		$output .= <<<EOF
-					<tr class="postform_hidden">
-						<td>
-							<div class="formlabel">本文（必須）</div>
-							<textarea id="message" name="message" accesskey="m"></textarea>
-						</td>
-					</tr>
+			<tr class="postform_hidden">
+			<td>
+			<div class="formlabel">本文（必須）</div>
+			<textarea id="message" name="message" accesskey="m"></textarea>
+			</td>
+			</tr>
 EOF;
 	}
 
@@ -278,55 +275,52 @@ EOF;
 EOF;
 	if ($raw_post || !in_array('password', $hide_fields)) {
 		$output .= <<<EOF
-					<tr class="postform_hidden">
-						<td>
-							<div class="formlabel">投稿のパスワード</div>
-							<input type="password" name="password" id="newpostpassword" size="8" accesskey="p">
-							&nbsp;&nbsp;(投稿・ファイルの削除用)
-							<hr>
-							<div align="center">
-							{$postform_extra['subject']}
-							</div>
-							<br><br><br>
-						</td>
-					</tr>
+			<tr class="postform_hidden">
+			<td>
+			<div class="formlabel">投稿のパスワード</div>
+			<input type="password" name="password" id="newpostpassword" size="8" accesskey="p">
+			&nbsp;&nbsp;(投稿・ファイルの削除用)
+			<hr>
+			<div align="center">
+			{$postform_extra['subject']}
+			</div>
+			<br><br><br>
+			</td>
+			</tr>
 EOF;
 	}
 	if ($postform_extra['footer'] != '') {
 		$output .= <<<EOF
-					<tr class="postform_hidden">
-						<td>
-							{$postform_extra['footer']}
-						</td>
-					</tr>
+			<tr class="postform_hidden">
+			<td>
+			{$postform_extra['footer']}
+			</td>
+			</tr>
 EOF;
 	}
 	$output .= <<<EOF
-					<tr class="postform_hidden">
-						<td class="rules">
-							$rules_extra
-							<ul>
-								$reqmod_html
-								$filetypes_html
-								$max_file_size_rules_html
-								$thumbnails_html
-								$unique_posts_html
-							</ul>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			</form>
+		<tr class="postform_hidden">
+		<td class="rules">
+		$rules_extra
+		<ul>
+		$reqmod_html
+		$filetypes_html
+		$max_file_size_rules_html
+		$thumbnails_html
+		$unique_posts_html
+		</ul>
+		</td>
+		</tr>
+		</tbody>
+		</table>
+		</form>
 		</div>
 EOF;
 
 	return $output;
 }
 
-function buildPost($post, $res) {
-	$return = "";
-	$threadid = ($post['parent'] == TINYIB_NEWTHREAD) ? $post['id'] : $post['parent'];
-
+function buildPost_refLink($res, $post, $threadid){
 	if ($res == TINYIB_RESPAGE) {
 		$reflink = "<a href=\"{$threadid}.php#{$post['id']}\">No.</a><a href=\"{$threadid}.php#q{$post['id']}\" onclick=\"javascript:quotePost('{$post['id']}')\">{$post['id']}</a>";
 	} else {
@@ -336,15 +330,17 @@ function buildPost($post, $res) {
 	if ($post["stickied"] == 1) {
 		$reflink .= ' <img src="sticky.png" alt="Stickied" title="Stickied" width="16" height="16">';
 	}
+	return $reflink;
+}
 
-	if (!isset($post["omitted"])) {
-		$post["omitted"] = 0;
-	}
+function buildPost_filehtml($res, $post){
 
 	$filehtml = '';
 	$filesize = '';
 	$expandhtml = '';
-	$direct_link = isEmbed($post["file_hex"]) ? "#" : (($res == TINYIB_RESPAGE ? "../" : "") . "src/" . $post["file"]);
+	$direct_link = isEmbed($post["file_hex"]) ?
+		"#" :
+		(($res == TINYIB_RESPAGE ? "../" : "") . "src/" . $post["file"]);
 
 	if ($post['parent'] == TINYIB_NEWTHREAD && $post["file"] != '') {
 		$filesize .= isEmbed($post['file_hex']) ? 'Embed: ' : 'File: ';
@@ -358,9 +354,10 @@ function buildPost($post, $res) {
 			$dimensions = 'width="' . $post['image_width'] . '" height="' . $post['image_height'] . '"';
 		}
 		$expandhtml = <<<EOF
-<video $dimensions style="position: static; pointer-events: inherit; display: inline; max-width: 100%; max-height: 100%;" controls autoplay loop>
-	<source src="$direct_link"></source>
-</video>
+			<video $dimensions style="position: static; pointer-events: inherit;
+			display: inline; max-width: 100%; max-height: 100%;" controls autoplay loop>
+			<source src="$direct_link"></source>
+			</video>
 EOF;
 	} else if (in_array(substr($post['file'], -4), array('.jpg', '.png', '.gif'))) {
 		$expandhtml = "<a href=\"$direct_link\" onclick=\"return expandFile(event, '${post['id']}');\"><img src=\"" . ($res == TINYIB_RESPAGE ? "../" : "") . "src/${post["file"]}\" width=\"${post["image_width"]}\" style=\"max-width: 100%;height: auto;\"></a>";
@@ -383,14 +380,14 @@ EOF;
 	}
 
 	if ($filesize != '') {
-		$filesize = '<span class="filesize">' . $filesize . '</span>';
+		$filesize = '<span class="filesize condensed">' . $filesize . '</span>';
 	}
 
 	if ($filesize != '') {
 		if ($post['parent'] != TINYIB_NEWTHREAD) {
 			$filehtml .= '<br>';
 		}
-		$filehtml .= $filesize . '<br><div id="thumbfile' . $post['id'] . '">';
+		$filehtml .= $filesize . '<br><div id="thumbfile' . $post['id'] . '" class="thumbfile">';
 		if ($post["thumb_width"] > 0 && $post["thumb_height"] > 0) {
 			$filehtml .= <<<EOF
 $thumblink
@@ -407,51 +404,53 @@ EOF;
 EOF;
 		}
 	}
+	return $filehtml;
+}
+
+function buildPost($post, $res) {
+	$return = "";
+	$post["omitted"] = (!isset($post["omitted"]))?0:$post["omitted"];
+	$threadid = ($post['parent'] == TINYIB_NEWTHREAD) ? $post['id'] : $post['parent'];
+
+	$reflink = buildPost_refLink($res, $post, $threadid);
+	$filehtml = buildPost_filehtml($res, $post);
+
 	if ($post["parent"] == TINYIB_NEWTHREAD) {
 		$return .= $filehtml;
 	} else {
-		$return .= <<<EOF
-<table>
-<tbody>
-<tr>
-<td class="doubledash">
-	&#0168;
-</td>
-<td class="reply" id="reply${post["id"]}">
-EOF;
+		$return .= '<table><tbody><tr>'
+		.'<td class="doubledash">&#0168;</td>'
+		.'<td class="reply" id="reply'.$post["id"].'">';
 	}
 
-	$return .= <<<EOF
-<a id="${post['id']}"></a>
-<label class="filetitle">
-EOF;
+	$return .= '<a id="'.$post['id'].'"></a>';
+	$return .= '<label class="filetitle">';
 
-	if ($post['subject'] != '') {
-		$return .= ' <span>' . $post['subject'] . '</span> ';
-	}
+	$return .= ($post['subject'] != '')?
+		' <span>' . $post['subject'] . '</span> ':
+		'';
 
-	$return .= <<<EOF
-</label><br>
-	<input type="checkbox" name="delete" value="${post['id']}">
-	${post["nameblock"]}
-<!-- span class="reflink">
-	$reflink
-</span -->
-EOF;
+	$return .= '</label><br>';
+	$return .= '<input type="checkbox" name="delete" value="'.$post['id'].'">';
+	$return .= $post["nameblock"];
+	$return .= '<!-- span class="reflink">'.$reflink.'</span -->';
 
-	if ($post['parent'] != TINYIB_NEWTHREAD) {
-		$return .= $filehtml;
-	}
+	$return .= ($post['parent'] != TINYIB_NEWTHREAD)?
+		$filehtml:
+		"";
 
-	if (TINYIB_TRUNCATE > 0 && !$res && substr_count($post['message'], '<br>') > TINYIB_TRUNCATE) { // Truncate messages on board index pages for readability
+
+	if (TINYIB_TRUNCATE > 0 && !$res && substr_count($post['message'], '<br>') > TINYIB_TRUNCATE) {
+		// Truncate messages on board index pages for readability
 		$br_offsets = strallpos($post['message'], '<br>');
 		$post['message'] = substr($post['message'], 0, $br_offsets[TINYIB_TRUNCATE - 1]);
-		$post['message'] .= '<br><span class="omittedposts">Post truncated.  Click Reply to view.</span><br>';
+		$post['message'] .= '<br><span class="omittedposts">
+			（ → <a href="res/'.$post["id"].'.php">全文を表示します</a>　）</span><br>';
 	}
 	$return .= <<<EOF
-<div class="message">
-${post["message"]}
-</div>
+		<div class="message">
+		${post["message"]}
+		</div>
 EOF;
 
 	if ($post['parent'] == TINYIB_NEWTHREAD && $res == TINYIB_INDEXPAGE) {
@@ -464,14 +463,42 @@ EOF;
 		}
 	} else {
 		$return .= <<<EOF
-</td>
-</tr>
-</tbody>
-</table>
+			</td>
+			</tr>
+			</tbody>
+			</table>
 EOF;
 	}
 
 	return $return;
+}
+
+
+function buildPage_pagenavigator($pages, $thispage ){
+	$pages = max($pages, 0);
+	$previous = ($thispage == 1) ? "index" : $thispage - 1;
+	$next = $thispage + 1;
+
+	$pagelinks = ($thispage == 0) ?
+		"<td>新しい投稿</td>" :
+		'<td><form method="get" action="' . $previous . '.php"><input class="biggreenbtn" value="←新しい" type="submit"></form></td>';
+	$pagelinks .= "<td>";
+	for ($i = 0; $i <= $pages; $i++) {
+		if ($thispage == $i) {
+			$pagelinks .= '&#91;' . $i . '&#93; ';
+		} else {
+			$href = ($i == 0) ? "index" : $i;
+			$pagelinks .= '&#91;<a href="' . $href . '.php">' . $i . '</a>&#93; ';
+		}
+	}
+	$pagelinks .= "</td>";
+	$pagelinks .= ($pages <= $thispage) ?
+		"<td>過去の投稿</td>" :
+		'<td><form method="get" action="' . $next . '.php"><input class="biggreenbtn" value="過去へ→" type="submit"></form></td>';
+
+	$pagenavigator = '<table border="1" id="pagelinks"><tbody><tr>'
+		.$pagelinks.'</tr></tbody></table>';
+	return $pagenavigator;
 }
 
 function buildPage($htmlposts, $parent, $pages = 0, $thispage = 0) {
@@ -480,38 +507,12 @@ function buildPage($htmlposts, $parent, $pages = 0, $thispage = 0) {
 	$postingmode = "";
 	$pagenavigator = "";
 	if ($parent == TINYIB_NEWTHREAD) {
-		$pages = max($pages, 0);
-		$previous = ($thispage == 1) ? "index" : $thispage - 1;
-		$next = $thispage + 1;
+		$pagenavigator = buildPage_pagenavigator($pages, $thispage );
 
-		$pagelinks = ($thispage == 0) ? "<td>過去の投稿</td>" : '<td><form method="get" action="' . $previous . '.php"><input value="Previous" type="submit"></form></td>';
-
-		$pagelinks .= "<td>";
-		for ($i = 0; $i <= $pages; $i++) {
-			if ($thispage == $i) {
-				$pagelinks .= '&#91;' . $i . '&#93; ';
-			} else {
-				$href = ($i == 0) ? "index" : $i;
-				$pagelinks .= '&#91;<a href="' . $href . '.php">' . $i . '</a>&#93; ';
-			}
-		}
-		$pagelinks .= "</td>";
-
-		$pagelinks .= ($pages <= $thispage) ? "<td>新しい投稿</td>" : '<td><form method="get" action="' . $next . '.php"><input value="Next" type="submit"></form></td>';
-
-		$pagenavigator = <<<EOF
-<table border="1" id="pagelinks">
-	<tbody>
-		<tr>
-			$pagelinks
-		</tr>
-	</tbody>
-</table>
-EOF;
 	} else {
 		$postingmode = '<div class="res_backtotop">&#91;<a href="../">'
 			.'トップページに戻る</a>&#93;</div>';
-				
+		$pagenavigator = $postingmode;
 	}
 
 	$postform = buildPostForm($parent);
@@ -538,20 +539,21 @@ EOF;
 	$body .= 'value="' . TINYIB_BOARD . '">' . <<<EOF
 		$htmlposts
 		<table class="userdelete">
-			<tbody>
-				<tr>
-					<td>
-						投稿の削除：削除用パスワード <input type="password" name="password" id="deletepostpassword" size="8" placeholder="Password">&nbsp;<input name="deletepost" value="投稿の削除" type="submit">
-					</td>
-				</tr>
-			</tbody>
+		<tbody>
+		<tr>
+		<td>
+		投稿の削除：削除用パスワード <input type="password" name="password" id="deletepostpassword" size="8" placeholder="Password">&nbsp;<input name="deletepost" value="投稿の削除" type="submit">
+		</td>
+		</tr>
+		</tbody>
 		</table>
 		<br clear="both">
 		</form>
 		$pagenavigator
 		<br>
 EOF;
-	return pageHeader() . $body . pageFooter();
+	$is_subdir = ($parent == TINYIB_NEWTHREAD)?false:true;
+	return pageHeader($is_subdir) . $body . pageFooter();
 }
 
 function rebuildIndexes() {
@@ -627,7 +629,7 @@ EOF;
 		$text
 		<hr>
 EOF;
-	return pageHeader() . $body . pageFooter();
+	return pageHeader(false) . $body . pageFooter();
 }
 
 function manageOnLoad($page) {

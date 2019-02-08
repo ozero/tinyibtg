@@ -99,7 +99,7 @@ define('TINYIB_DBDSN', '');           // Enter a custom DSN to override all of t
 //                                         When changing this, you should still set TINYIB_DBDRIVER appropriately.
 //                                         If you're using PDO with a MySQL or pgSQL database, you should leave this blank.
 
-
+define('TINYIB_PATH_INSTALL', '/home/gyouza/www/ib.currentdir.com/docs');//Installed path
 
 // Telegram Login
 define('BOT_USERNAME', ''); // place username of your bot here

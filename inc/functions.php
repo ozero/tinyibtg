@@ -203,19 +203,19 @@ function nameBlock($name, $tripcode, $email, $timestamp, $rawposttext) {
 	$output = '<span class="postername condensed">';
 	$output .= ($name == '' && $tripcode == '') ? 'Anonymous' : $name;
 
-	if ($tripcode != '') {
-		$output .= '</span><span class="postertrip condensed">!' . $tripcode;
-	}
+	$output .=($tripcode != '')?
+		'</span><span class="postertrip condensed">!' . $tripcode:
+		"";
 
 	$output .= '</span>';
 
-	if ($email != '' && strtolower($email) != 'noko') {
-		$output = '<a href="mailto:' . $email . '">' . $output . '</a>';
-	}
+	$output = ($email != '' && strtolower($email) != 'noko')?
+		'<a href="mailto:' . $email . '">' . $output . '</a>':
+		$output;
 
 	return $output . $rawposttext
-	. '<div class="posterdate condensed">'
-	. date('y/m/d(D)H:i:s', $timestamp). '</div>';
+		. '<span class="posterdate condensed">'
+		. date('y/m/d(D)H:i:s', $timestamp). '</span>';
 }
 
 function writePage($filename, $contents) {
