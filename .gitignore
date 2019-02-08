@@ -1,4 +1,5 @@
 settings.php
+index.html
 *.html
 *.db
 .posts
