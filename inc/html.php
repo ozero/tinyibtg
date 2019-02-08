@@ -7,7 +7,7 @@ function pageHeader() {
 	$js_captcha = TINYIB_CAPTCHA === 'recaptcha' ? '<script src="https://www.google.com/recaptcha/api.js" async defer></script>' : '';
 
 	$return = <<<EOF
-<?php require_once("/home/gyouza/www/ib.currentdir.com/docs/inc/tgcheck.php"); ?><!DOCTYPE html>
+<?php require_once("____ABSOLUTE_PATH_FOR_TGCHECK_PHP____/inc/tgcheck.php"); ?><!DOCTYPE html>
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=UTF-8">
