@@ -3,14 +3,19 @@
 
 ええとねー。「＊＊＊のTGグループに入ってるひとだけが見られる掲示板」を作ったよ。
 
-- ＠botfatherとお話して、tgBot準備してね。
+- ＠botfatherと `/newbot` ってお話して、Telegram Botを準備してね
+  - botの名前を指定
+  - botのユーザ名を指定　→　ここでHTTP APIを喋る用のトークンもらえるよ
+  - `/setdomain` からbotのアクセス元webサイトのドメイン名を指定
 
 - `settings.default.php` を `../data/setting.php`にコピーしてね
 
+- どうにかして許可元ID台帳となるTGグループのchat_idを取得してね。（どうやったんだっけ…。botをグループに参加させたとか？）
+
 - 以下をうめてね
-`BOT_USERNAME`
-`BOT_TOKEN`
-`BOT_CHATROOM_ID`
+  - `BOT_USERNAME`
+  - `BOT_TOKEN`
+  - `BOT_CHATROOM_ID`
 
 - `./imgboard.php` にアクセスしてね
  
