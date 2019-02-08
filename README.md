@@ -10,9 +10,7 @@
 
 - `settings.default.php` を `../data/setting.php`にコピーしてね
 
-- `inc/html.php` の `____ABSOLUTE_PATH_FOR_TGCHECK_PHP____` を適切な内容に直してね
-
-- どうにかして許可元ID台帳となるTGグループのchat_idを取得してね。
+- 許可元ID台帳として使いたいTGグループのchat_idを取得してね。
   - こうやる：["Telegram event handler | InfluxData Documentation"](https://docs.influxdata.com/kapacitor/v1.5/event_handlers/telegram/#get-your-telegram-chat-id)
 
 - 以下をうめてね
