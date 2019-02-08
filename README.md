@@ -10,6 +10,8 @@
 
 - `settings.default.php` を `../data/setting.php`にコピーしてね
 
+- `inc/html.php` の `____ABSOLUTE_PATH_FOR_TGCHECK_PHP____` を適切な内容に直してね
+
 - どうにかして許可元ID台帳となるTGグループのchat_idを取得してね。（どうやったんだっけ…。botをグループに参加させたとか？）
 
 - 以下をうめてね
