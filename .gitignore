@@ -1,6 +1,6 @@
 settings.php
 index.html
-/index.php
+index.php
 [0-9]+.php
 res/*.*
 thumb/*.*
@@ -12,4 +12,4 @@ src/*.*
 .project
 .settings/
 .idea/
-*error_log 
+*error_log
