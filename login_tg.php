@@ -2,7 +2,6 @@
 /*
 https://gist.github.com/anonymous/6516521b1fb3b464534fbc30ea3573c2
 https://core.telegram.org/widgets/login
-https://test.currentdir.com/tgnote/login_example.php
 */
 
 
